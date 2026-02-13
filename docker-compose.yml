@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - db_data:/app/data
+    env_file:
+      - .env
+    restart: always
+
+volumes:
+  db_data:

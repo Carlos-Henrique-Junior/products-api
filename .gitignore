@@ -1,0 +1,22 @@
+# Python (Cache e Venv)
+__pycache__/
+*.py[cod]
+*.class
+.venv/
+.cache/
+.pytest_cache/
+
+# Documentação de Testes (Rodamos localmente, não no Git)
+htmlcov/
+.coverage
+
+# Banco de Dados e Dados Locais
+*.db
+*.db-journal
+data/
+
+# Docker
+.docker/
+
+# Configurações sensíveis (IMPORTANTE)
+.env
