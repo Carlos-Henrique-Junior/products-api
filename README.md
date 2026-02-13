@@ -1,44 +1,51 @@
-# 📦 Products Management API (Modern FastAPI)
+# 📦 Products Management API (Modern FastAPI) & BI Dashboard
 
-![CI Status](https://github.com/SEU_USUARIO/products-api/actions/workflows/ci.yml/badge.svg)
-![Python Version](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue)
+![CI Status](https://github.com/Carlos-Henrique-Junior/products-api/actions/workflows/ci.yml/badge.svg)
+![Python Version](https://img.shields.io/badge/python-3.13-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Standard-009688)
-![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-78%25-green)
 
-API robusta para gerenciamento de produtos, desenvolvida com foco em alta performance, código limpo e análise de dados.
+Sistema completo de gerenciamento de inventário com foco em **segurança**, **performance** e **análise de dados**. O projeto une um backend robusto a um dashboard interativo para insights em tempo real.
 
-## 🛠 Tecnologias Utilizadas
-* **Python 3.12/3.13**
-* **FastAPI Standard**
-* **SQLAlchemy Async**
-* **SQLite (aiosqlite)**
-* **Docker & Docker Compose**
-* **Alembic** (Migrações)
-* **Pytest & Coverage** (100% de cobertura)
-* **GitHub Actions** (CI/CD)
+## 🛠 Tecnologias e Conceitos
+* **FastAPI (Python 3.13)**: Backend assíncrono de alta performance.
+* **Segurança JWT**: Autenticação OAuth2 com tokens JSON Web Token.
+* **SQLAlchemy Async**: Operações em banco de dados SQLite sem bloqueio.
+* **Streamlit & Plotly**: Visualização de dados dinâmica com engenharia de atributos.
+* **Docker**: Ambiente totalmente isolado e reprodutível.
+* **Qualidade**: Testes de integração cobrindo fluxos de segurança e analytics.
 
-## 📊 Analytics Integration
-A API possui uma rota especializada (`/stats`) que utiliza funções agregadas do SQL para fornecer insights imediatos, ideais para integração com dashboards de **Power BI**.
+## 📊 Dashboard de Business Intelligence
+O dashboard integrado permite visualizar:
+* **Métricas Gerais**: Ticket médio, volumetria e amplitude de preços.
+* **Mix de Produtos**: Distribuição percentual por faixa de preço (Econômico, Intermediário, Premium).
+* **Análise de Valor**: Gráficos comparativos de preços por SKU.
 
 ## 🚀 Como Executar
 
-### Via Docker (Recomendado)
+### 1. Subir a Infraestrutura (Docker)
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
-Acesse a documentação interativa em: http://localhost:8000/docs
+API disponível em: http://localhost:8000/docs
 
-### Rodando Testes e Cobertura
+### 2. Popular o Banco (Seed)
+Para ver os gráficos com dados reais de exemplo, rode:
+```bash
+poetry run python seed.py
+```
+
+### 3. Abrir o Dashboard (Streamlit)
+```bash
+poetry run streamlit run dashboard.py
+```
+Acesse: http://localhost:8501 (Login padrão no seed: carlos / 123)
+
+## 🧪 Qualidade de Código
+Para rodar a suíte completa de testes e gerar o relatório de cobertura:
 ```bash
 poetry run pytest --cov=products_api --cov-report=html
 ```
 
-## 📌 Métodos Implementados
-* **GET**: Listagem e visualização.
-* **POST**: Criação de recursos.
-* **PUT/PATCH**: Atualização total e parcial.
-* **DELETE**: Remoção de itens.
-* **HEAD/OPTIONS**: Infraestrutura e metadados.
-
 ---
-Desenvolvido por Carlos - Foco em Backend Python & Data Analysis.
+Desenvolvido por **Carlos Henrique Junior** - Integrando Engenharia de Software e Data Analytics.
