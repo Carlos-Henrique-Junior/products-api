@@ -1,25 +1,11 @@
-from fastapi import FastAPI, status
-from products_api.routers import products
+from fastapi import FastAPI
+from products_api.routers import products, auth
 
-app = FastAPI(
-    title="Products Management API",
-    description="API robusta para gerenciamento de inventário de produtos com suporte total a métodos RESTful.",
-    version="1.0.0",
-    contact={
-        "name": "Carlos",
-        "url": "https://github.com/seu-usuario",
-    },
-    license_info={
-        "name": "MIT",
-    },
-)
+app = FastAPI(title="Products Management API")
 
-app.include_router(
-    router=products.router,
-    prefix='/api/v1/products',
-    tags=['Products'], # Isso agrupa as rotas em uma seção no Swagger
-)
+app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+app.include_router(products.router, prefix="/api/v1/products", tags=["Products"])
 
-@app.get('/health_check', status_code=status.HTTP_200_OK, tags=['System'])
+@app.get("/health_check")
 def health_check():
-    return {'status': 'ok'}
+    return {"status": "ok"}
