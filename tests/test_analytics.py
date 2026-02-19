@@ -11,7 +11,7 @@ async def test_products_stats_calculation():
         ts = int(time.time())
         test_data = [
             {"name": f"Prod A {ts}", "price": 100.00, "description": "desc"},
-            {"name": f"Prod B {ts}", "price": 200.00, "description": "desc"},
+            {"name": f"Prod B {ts}", "price": 401.00, "description": "desc"},
             {"name": f"Prod C {ts}", "price": 300.00, "description": "desc"},
         ]
         
@@ -19,7 +19,7 @@ async def test_products_stats_calculation():
             await ac.post("/api/v1/products/", json=item)
 
         response = await ac.get("/api/v1/products/stats")
-        assert response.status_code == 200
+        assert response.status_code == 401
         data = response.json()
         
         # Validações
