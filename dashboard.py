@@ -2,12 +2,14 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.express as px
+import os # <--- ADICIONADO AQUI
 
 st.set_page_config(page_title="Analytics de Produtos", layout="wide")
 
 st.title("📊 Dashboard de Inventário Profissional")
 
-API_URL = "http://127.0.0.1:8000"
+# CORREÇÃO: Lê do ambiente, ou usa localhost como fallback
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 if 'token' not in st.session_state:
     st.session_state.token = None
@@ -19,7 +21,7 @@ with st.sidebar:
         password = st.text_input("Senha", type="password")
         if st.button("Entrar"):
             try:
-                res = requests.post(f"{API_URL}/auth/token", data={"username": username, "password": password})
+                res = requests.post(f"{API_URL}/api/v1/auth/token", data={"username": username, "password": password})
                 if res.status_code == 200:
                     st.session_state.token = res.json()["access_token"]
                     st.rerun()
@@ -58,7 +60,7 @@ if st.session_state.token:
 
             def categorize(price):
                 if price < 500: return "Econômico (< 500)"
-                elif price < 2000: return "Intermediário (5k-2k)"
+                elif price < 2000: return "Intermediário (500-2k)"
                 return "Premium (> 2k)"
             
             df['Categoria'] = df['price'].apply(categorize)
