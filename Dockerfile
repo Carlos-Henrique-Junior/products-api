@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . .
 
 # Instalamos as dependências
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi --only main
+RUN poetry config virtualenvs.create false && poetry lock && poetry install --no-interaction --no-ansi --only main
 
 # Garante que o script de entrada tenha permissão
 RUN chmod +x entrypoint.sh
