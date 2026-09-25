@@ -1,13 +1,13 @@
 from fastapi import APIRouter, status, HTTPException, Depends, Response
-from fastapi.security import OAuth2PasswordBearer
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from loguru import logger
 from decimal import Decimal
-import jwt
+
 
 from products_api.core.database import get_session
-from products_api.core.security import SECRET_KEY, ALGORITHM
+from products_api.core.security import get_current_user
 from products_api.models.products import Product
 from products_api.schemas.products import (
     ProductSchema, ProductListPublicSchema, ProductPublicSchema,
@@ -15,14 +15,6 @@ from products_api.schemas.products import (
 )
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
-
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload.get("sub")
-    except:
-        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
 
 # 1. ANALYTICS (Protegido para o Dashboard)
 @router.get('/stats', response_model=ProductStatsSchema, summary='DASHBOARD: Estatísticas', tags=['Analytics'])
@@ -43,6 +35,21 @@ async def get_products_stats(db: AsyncSession = Depends(get_session), user: str 
 async def list_products(db: AsyncSession = Depends(get_session)):
     result = await db.scalars(select(Product))
     return {'products': result.all()}
+
+
+@router.head('/{product_id}', summary='HEAD: Verificar produto')
+async def head_product(product_id: int, db: AsyncSession = Depends(get_session)):
+    if not await db.get(Product, product_id):
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
+    return Response(status_code=status.HTTP_200_OK)
+
+
+@router.options('/', summary='OPTIONS: Métodos permitidos')
+async def product_options():
+    return Response(
+        status_code=status.HTTP_200_OK,
+        headers={"Allow": "GET, POST, OPTIONS"},
+    )
 
 # 3. CRIAR
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=ProductPublicSchema, summary='POST: Criar produto')
