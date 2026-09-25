@@ -43,6 +43,10 @@ poetry run streamlit run dashboard.py
 ```
 Acesse: http://localhost:8501 (Credenciais geradas pelo seed: carlos / 123)
 
+## 📚 Documentação da API
+
+A referência funcional dos endpoints, autenticação, exemplos e códigos HTTP está em [`docs/API.md`](docs/API.md). A documentação interativa também fica disponível em `/docs` quando a API está em execução.
+
 ## 🧪 Qualidade de Código
 Para rodar a suíte de testes localmente:
 ```bash
