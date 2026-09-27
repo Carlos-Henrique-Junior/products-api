@@ -2,8 +2,8 @@
 name = "products-api"
 package-mode = false
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "API de gerenciamento de produtos com autenticação JWT e dashboard de analytics"
+authors = ["Carlos Henrique Junior"]
 readme = "README.md"
 packages = [{include = "products_api"}]
 
@@ -34,6 +34,14 @@ pytest-cov = "^7.0.0"
 
 [tool.ruff]
 line-length = 79
+
+[tool.ruff.lint]
+# B008: FastAPI usa Depends(...) como valor default de parâmetro por design
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+# E402: DATABASE_URL precisa ser definida antes dos imports da aplicação
+"tests/conftest.py" = ["E402"]
 
 [tool.taskipy.tasks]
 lint = 'ruff check'

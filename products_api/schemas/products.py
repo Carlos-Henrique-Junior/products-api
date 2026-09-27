@@ -13,10 +13,11 @@ class ProductSchema(BaseModel):
             "example": {
                 "name": "Teclado Mecânico RGB",
                 "price": 350.90,
-                "description": "Teclado switch blue com layout ABNT2"
+                "description": "Teclado switch blue com layout ABNT2",
             }
         }
     )
+
 
 class ProductPublicSchema(BaseModel):
     id: int
@@ -24,13 +25,16 @@ class ProductPublicSchema(BaseModel):
     price: Decimal
     description: str
 
+
 class ProductUpdateSchema(BaseModel):
     name: str | None = Field(None, min_length=3)
     price: Decimal | None = Field(None, gt=0)
     description: str | None = Field(None, min_length=1)
 
+
 class ProductListPublicSchema(BaseModel):
     products: list[ProductPublicSchema]
+
 
 # Novo Schema para Dados Analíticos
 class ProductStatsSchema(BaseModel):

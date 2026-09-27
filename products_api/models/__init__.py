@@ -1,3 +1,3 @@
-from .base import Base
-from .products import Product
-from .users import User
+from .base import Base as Base
+from .products import Product as Product
+from .users import User as User

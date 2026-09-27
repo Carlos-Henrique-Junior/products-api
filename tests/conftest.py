@@ -1,3 +1,8 @@
+import os
+
+os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///./test.db"
+os.environ["SECRET_KEY"] = "insecure-test-secret-key-32-bytes-minimum"
+
 import pytest_asyncio
 
 from products_api.core.database import engine

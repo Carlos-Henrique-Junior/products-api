@@ -8,7 +8,6 @@ from products_api.app import app
 async def test_full_secure_analytics_flow():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        
         # 1. Signup: Criar um usuário de teste
         user_data = {"username": "testuser", "password": "testpassword"}
         signup_res = await ac.post("/auth/signup", json=user_data)
@@ -28,6 +27,6 @@ async def test_full_secure_analytics_flow():
         headers = {"Authorization": f"Bearer {token}"}
         secure_res = await ac.get("/api/v1/products/stats", headers=headers)
         assert secure_res.status_code == 200
-        
+
         data = secure_res.json()
         assert "total_count" in data

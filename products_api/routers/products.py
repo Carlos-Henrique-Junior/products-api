@@ -18,53 +18,89 @@ from products_api.schemas.products import (
 
 router = APIRouter()
 
+
 # 1. ANALYTICS (Protegido para o Dashboard)
-@router.get('/stats', response_model=ProductStatsSchema, summary='DASHBOARD: Estatísticas', tags=['Analytics'])
-async def get_products_stats(db: AsyncSession = Depends(get_session), user: str = Depends(get_current_user)):
+@router.get(
+    "/stats",
+    response_model=ProductStatsSchema,
+    summary="DASHBOARD: Estatísticas",
+    tags=["Analytics"],
+)
+async def get_products_stats(
+    db: AsyncSession = Depends(get_session),
+    user: str = Depends(get_current_user),
+):
     logger.info(f"Usuário {user} acessando insights analíticos")
-    query = select(func.count(Product.id), func.avg(Product.price), func.min(Product.price), func.max(Product.price))
+    query = select(
+        func.count(Product.id),
+        func.avg(Product.price),
+        func.min(Product.price),
+        func.max(Product.price),
+    )
     result = await db.execute(query)
     count, avg, min_p, max_p = result.fetchone()
     return {
         "total_count": count or 0,
         "average_price": round(Decimal(avg or 0), 2),
         "min_price": Decimal(min_p or 0),
-        "max_price": Decimal(max_p or 0)
+        "max_price": Decimal(max_p or 0),
     }
 
+
 # 2. LISTAR
-@router.get('/', response_model=ProductListPublicSchema, summary='GET: Listar produtos')
+@router.get(
+    "/", response_model=ProductListPublicSchema, summary="GET: Listar produtos"
+)
 async def list_products(db: AsyncSession = Depends(get_session)):
     result = await db.scalars(select(Product))
-    return {'products': result.all()}
+    return {"products": result.all()}
 
 
-@router.head('/{product_id}', summary='HEAD: Verificar produto')
-async def head_product(product_id: int, db: AsyncSession = Depends(get_session)):
+@router.head("/{product_id}", summary="HEAD: Verificar produto")
+async def head_product(
+    product_id: int, db: AsyncSession = Depends(get_session)
+):
     if not await db.get(Product, product_id):
         raise HTTPException(status_code=404, detail="Produto não encontrado")
     return Response(status_code=status.HTTP_200_OK)
 
 
-@router.options('/', summary='OPTIONS: Métodos permitidos')
+@router.options("/", summary="OPTIONS: Métodos permitidos")
 async def product_options():
     return Response(
         status_code=status.HTTP_200_OK,
         headers={"Allow": "GET, POST, OPTIONS"},
     )
 
+
 # 3. CRIAR
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=ProductPublicSchema, summary='POST: Criar produto')
-async def create_product(product: ProductSchema, db: AsyncSession = Depends(get_session)):
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ProductPublicSchema,
+    summary="POST: Criar produto",
+)
+async def create_product(
+    product: ProductSchema, db: AsyncSession = Depends(get_session)
+):
     db_product = Product(**product.model_dump())
     db.add(db_product)
     await db.commit()
     await db.refresh(db_product)
     return db_product
 
+
 # 4. ATUALIZAÇÃO TOTAL (PUT)
-@router.put('/{product_id}', response_model=ProductPublicSchema, summary='PUT: Atualização total')
-async def update_product_total(product_id: int, product_data: ProductSchema, db: AsyncSession = Depends(get_session)):
+@router.put(
+    "/{product_id}",
+    response_model=ProductPublicSchema,
+    summary="PUT: Atualização total",
+)
+async def update_product_total(
+    product_id: int,
+    product_data: ProductSchema,
+    db: AsyncSession = Depends(get_session),
+):
     product = await db.get(Product, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Produto não encontrado")
@@ -74,9 +110,18 @@ async def update_product_total(product_id: int, product_data: ProductSchema, db:
     await db.refresh(product)
     return product
 
+
 # 5. ATUALIZAÇÃO PARCIAL (PATCH)
-@router.patch('/{product_id}', response_model=ProductPublicSchema, summary='PATCH: Atualização parcial')
-async def partial_update_product(product_id: int, product_update: ProductUpdateSchema, db: AsyncSession = Depends(get_session)):
+@router.patch(
+    "/{product_id}",
+    response_model=ProductPublicSchema,
+    summary="PATCH: Atualização parcial",
+)
+async def partial_update_product(
+    product_id: int,
+    product_update: ProductUpdateSchema,
+    db: AsyncSession = Depends(get_session),
+):
     product = await db.get(Product, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Produto não encontrado")
@@ -87,9 +132,16 @@ async def partial_update_product(product_id: int, product_update: ProductUpdateS
     await db.refresh(product)
     return product
 
+
 # 6. EXCLUIR (DELETE)
-@router.delete('/{product_id}', status_code=status.HTTP_204_NO_CONTENT, summary='DELETE: Excluir produto')
-async def delete_product(product_id: int, db: AsyncSession = Depends(get_session)):
+@router.delete(
+    "/{product_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="DELETE: Excluir produto",
+)
+async def delete_product(
+    product_id: int, db: AsyncSession = Depends(get_session)
+):
     product = await db.get(Product, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Produto não encontrado")
