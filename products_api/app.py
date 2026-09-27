@@ -1,8 +1,10 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+
 from products_api.core.database import engine
 from products_api.models import Base
-from products_api.routers import products, auth
+from products_api.routers import auth, products
 
 
 @asynccontextmanager

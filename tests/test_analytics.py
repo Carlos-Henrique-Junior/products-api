@@ -1,7 +1,10 @@
-import pytest
 import time
-from httpx import AsyncClient, ASGITransport
+
+import pytest
+from httpx import ASGITransport, AsyncClient
+
 from products_api.app import app
+
 
 @pytest.mark.asyncio
 async def test_products_stats_calculation():

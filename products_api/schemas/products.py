@@ -1,6 +1,7 @@
 from decimal import Decimal
-from typing import Optional, List
-from pydantic import BaseModel, Field, ConfigDict
+
+from pydantic import BaseModel, ConfigDict, Field
+
 
 class ProductSchema(BaseModel):
     name: str = Field(..., min_length=3, max_length=100)
@@ -24,12 +25,12 @@ class ProductPublicSchema(BaseModel):
     description: str
 
 class ProductUpdateSchema(BaseModel):
-    name: Optional[str] = Field(None, min_length=3)
-    price: Optional[Decimal] = Field(None, gt=0)
-    description: Optional[str] = Field(None, min_length=1)
+    name: str | None = Field(None, min_length=3)
+    price: Decimal | None = Field(None, gt=0)
+    description: str | None = Field(None, min_length=1)
 
 class ProductListPublicSchema(BaseModel):
-    products: List[ProductPublicSchema]
+    products: list[ProductPublicSchema]
 
 # Novo Schema para Dados Analíticos
 class ProductStatsSchema(BaseModel):

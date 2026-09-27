@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any
+
 import jwt
-from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from passlib.context import CryptContext
+
 from products_api.core.settings import settings
 
 # Configurações básicas (Em produção, use variáveis de ambiente!)

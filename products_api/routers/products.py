@@ -1,17 +1,19 @@
-from fastapi import APIRouter, status, HTTPException, Depends, Response
-
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
-from loguru import logger
 from decimal import Decimal
 
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from loguru import logger
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from products_api.core.database import get_session
 from products_api.core.security import get_current_user
 from products_api.models.products import Product
 from products_api.schemas.products import (
-    ProductSchema, ProductListPublicSchema, ProductPublicSchema,
-    ProductUpdateSchema, ProductStatsSchema,
+    ProductListPublicSchema,
+    ProductPublicSchema,
+    ProductSchema,
+    ProductStatsSchema,
+    ProductUpdateSchema,
 )
 
 router = APIRouter()

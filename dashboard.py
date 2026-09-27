@@ -1,8 +1,9 @@
-import streamlit as st
-import requests
+import os  # <--- ADICIONADO AQUI
+
 import pandas as pd
 import plotly.express as px
-import os # <--- ADICIONADO AQUI
+import requests
+import streamlit as st
 
 st.set_page_config(page_title="Analytics de Produtos", layout="wide")
 
